@@ -29,6 +29,7 @@ func (p *Employee) DeepCopy() *Employee {
 var mainOffice = Employee{"", Address{0, "123 East Dr", "London"}}
 var auxOffice = Employee{"", Address{0, "66 West Dr", "London"}}
 
+// Deep Copy and Customization in one factory function
 func NewEmployee(proto *Employee, name string, suite int) *Employee {
 	result := proto.DeepCopy()
 	result.Name = name
