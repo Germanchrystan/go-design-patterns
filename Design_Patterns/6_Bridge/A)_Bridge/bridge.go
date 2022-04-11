@@ -56,7 +56,8 @@ func (c *Circle) Resize(factor float32) {
 }
 
 func main() {
-	// Instantiating renderers to introduce as a circle dependency
+	// Instantiating renderers to introduce as a circle dependency.
+	// Using renderers as dependency, we avoid having two types of circle structs.
 	raster := RasterRenderer{}
 	vector := VectorRenderer{}
 
@@ -65,4 +66,10 @@ func main() {
 
 	circle.Draw()
 	circle2.Resize(.5)
+
+	/*
+		If we introduce a new shape, like a square, we would by necessity introduce a new rendering method
+		to it. So the rendered inteface would have a render square method, and this methods should be defined
+		in each renderer type struct. But this is the price to pay for the additional flexibility.
+	*/
 }
