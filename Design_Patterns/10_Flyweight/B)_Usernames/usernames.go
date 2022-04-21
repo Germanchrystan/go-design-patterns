@@ -40,6 +40,7 @@ var allNames []string
 
 type User2 struct {
 	names []uint8 // All of the parts of a full name will become integers
+	// Flyweight is inside names. 
 }
 
 func NewUser2(fullname string) *User2 {
