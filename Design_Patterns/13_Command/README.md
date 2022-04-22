@@ -10,3 +10,9 @@ We can also group commands together and save a whole sequence of commands. These
 
 A Command is an object which represents an instruction to perform a particular action. Contains all the information necessary for the action to be taken. 
 A command can be processed by the object that the command operates on, or processed by itself. It can basically have a call method to apply its commands or alternatively, there could also be a command processor, where all the commands are sent.
+
+### In Summary
+- Encapsulate all details of an operation in a separate object.
+- Define functions for applying the command(either in the command itself, or elsewhere).
+- Optionally define instructions for undoing the command.
+- Can create composite commands (macros).
