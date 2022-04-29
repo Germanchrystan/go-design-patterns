@@ -35,6 +35,7 @@ func PlayGame(g Game) {
 	fmt.Printf("Player %d wins.\n", g.WinningPlayer())
 }
 
+// Structural approach
 type chess struct { // Hiding struct and its internals, This will be operated externally by the interface
 	turn, maxTurns, currentPlayer int
 }
