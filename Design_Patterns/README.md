@@ -44,3 +44,47 @@
 * Proxy
     * Provide a surrogate object that forwards calls to the real object while performing additional functions.
     * E.g., access control, communication, logging, etc.
+
+## Behavioral
+
+* Chain of Responsibility
+    * Allow components to process information/events in a chain.
+    * Each element in the chain refers to next element; or
+    * Make a list and go through it.
+
+* Command
+    * Encapsulate a request into a separate object.
+    * Good for audit, replay, undo/redo
+    * Part of CQS/CQRS.
+
+* Interpreter
+    * Transform textual input into structures (e.g. ASTs)
+    * Used by interpreters, compilers, static analysis tools, etc.
+    * Compiler Theory is a separate branch of Computer Science.
+
+* Iterator
+    * Provides an interface for accesing elements of an aggregated object.
+    * An alternative to the visitor. We can implement one or the other.
+
+* Mediator
+    * Provides mediation services between several objects.
+    * E.g., message passing, chat room.
+
+* Memento
+    * Yields tokens representing system states.
+    * Tokens do not allow direct manipulation, but can be used in appropiate APIs.
+
+* Observer
+    * Allows notifications of changes/happenings in a component.
+
+* State 
+    * We model systems by having one of many possible states, and developing transitions between these states.
+    * Such a system is called a state machine.
+    * Special frameworks exists to orchestrate state machines.
+
+* Strategy & Template Method
+    * Both define a skeleton algorithm with details filled in by implementer.
+    * Strategy uses composition; Template method doesn't.
+
+* Visitor 
+    * Allows non-intrusive addition of functionality to hierarchies.
