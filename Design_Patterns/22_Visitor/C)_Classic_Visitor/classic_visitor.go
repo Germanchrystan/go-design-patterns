@@ -1,6 +1,9 @@
 package main
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 /*
 	Go doesn't support function overload.
@@ -69,10 +72,91 @@ type ExpressionPrinter struct {
 	sb strings.Builder
 }
 
-func (ex ExpressionPrinter) VisitDoubleExpression(e *DoubleExpression) {
-
+func NewExpressionPrinter() *ExpressionPrinter {
+	return &ExpressionPrinter{strings.Builder{}}
 }
 
-func (ex ExpressionPrinter) VisitAdditionExpression(e *AdditionExpression) {
+func (ep *ExpressionPrinter) VisitDoubleExpression(e *DoubleExpression) {
+	ep.sb.WriteString(fmt.Sprintf("%g", e.value))
+}
 
+func (ep *ExpressionPrinter) VisitAdditionExpression(e *AdditionExpression) {
+	ep.sb.WriteRune('(')
+	e.left.Accept(ep)
+	ep.sb.WriteRune('+')
+	e.right.Accept(ep)
+	ep.sb.WriteRune(')')
+
+	/*
+		In the Accept method is where the double dispatch magic happens.
+		So we call e.left.Accept(), and the reason why we call this,
+		regardless of what left is, is because e.left is an expression,
+		and an expression is an interface that defines a method called Accept.
+		So we know that the method Accept is there, and we pass the ep as the argument.
+		So, we end up going to the Accept method, which in turn returns us to one
+		of the Visit Expression functions. By doing this double jump, we are able
+		to have all the information about the callee and the caller.
+	*/
+}
+
+func (ep *ExpressionPrinter) String() string {
+	return ep.sb.String()
+}
+
+func main1() {
+	// 1 + (2+3)
+	e := AdditionExpression{
+		left: &DoubleExpression{1},
+		right: &AdditionExpression{
+			left:  &DoubleExpression{2},
+			right: &DoubleExpression{3},
+		},
+	}
+	ep := NewExpressionPrinter()
+	e.Accept(ep)
+	fmt.Println(ep.String())
+
+	/*
+		Let's talk about the extensibility of this approach,
+		because we have been fighting for having the support of the Open Closed Principle.
+		There are still some modifications that might be required.
+		Imagine adding a Substraction expression.
+		We would have to add a VisitSubstractionExpression to the ExpressionVisitor interface.
+		But as soon as we do this all of the visitors involved would have to support substraction
+		expressions. This is a drastic difference, because in this case we can't forget to handle this case.
+	*/
+}
+
+// Imagine we want to add an Evaluate expression
+type ExpressionEvaluator struct {
+	result float64
+}
+
+func (ee ExpressionEvaluator) VisitDoubleExpression(e *DoubleExpression) {
+	ee.result = e.value
+}
+
+func (ee ExpressionEvaluator) VisitAdditionExpression(e *AdditionExpression) {
+	e.left.Accept(ee)
+	x := ee.result
+	e.right.Accept(ee)
+	x += ee.result
+	ee.result = x
+}
+
+func main() {
+	// 1 + (2+3)
+	e := AdditionExpression{
+		left: &DoubleExpression{1},
+		right: &AdditionExpression{
+			left:  &DoubleExpression{2},
+			right: &DoubleExpression{3},
+		},
+	}
+	ep := NewExpressionPrinter()
+	e.Accept(ep)
+
+	ee := &ExpressionEvaluator{}
+	e.Accept(ee)
+	fmt.Printf("%s = %g", ep, ee.result)
 }
